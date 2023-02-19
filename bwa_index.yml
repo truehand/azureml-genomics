@@ -1,0 +1,24 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+
+name: component_bwa_indexer
+display_name: BWA Indexer
+version: 1
+
+inputs:
+  ref_genome:
+    type: uri_file
+
+outputs:
+  ref_index_folder:
+    type: uri_folder
+
+environment: azureml:bwa:5
+
+command: >-
+  fasta=`gunzip -l ${{inputs.ref_genome}} |tail -1 |tr -s ' '| cut -d ' ' -f 5` &&
+  gunzip ${{inputs.ref_genome}} && 
+  sleep 10 && 
+  bwa index -p hg38 -a bwtsw $fasta && 
+  sleep 10 && 
+  mv hg38* ${{outputs.ref_index_folder}} 
