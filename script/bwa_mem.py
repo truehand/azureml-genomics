@@ -18,14 +18,18 @@ def init():
 
     parser.add_argument("--ref_genome_index", type=str, default="")
     parser.add_argument("--output_folder", type=str, default="")
+    parser.add_argument("--cpu_threads", type=int, default=2)
     args, _ = parser.parse_known_args()
 
     global ref_genome_index
     global output_folder
+    global cpu_threads
     ref_genome_index = args.ref_genome_index
     output_folder = args.output_folder
+    cpu_threads = args.cpu_threads
     print("ref_genome_index:", ref_genome_index)
     print ("output folder:", output_folder)
+    print ("cpu_threads:", cpu_threads)
 
 
 def run(mini_batch):
@@ -45,7 +49,7 @@ def run(mini_batch):
                 raise Exception("Error: R1 and R2 files are not paired")
         sam_file = os.path.basename(r1)
         sam_file = sam_file.replace('_R1.fastq.gz', '.sam')
-        cmd = 'cp  ' + ref_genome_index + '/* ./ && bwa mem hg38 -t 2 ' + r1 + ' ' + r2 + ' -o ' + output_folder + "/" + sam_file
+        cmd = 'cp  ' + ref_genome_index + '/* ./ && bwa mem hg38 -t ' + cpu_threads + ' ' + r1 + ' ' + r2 + ' -o ' + output_folder + "/" + sam_file
         try:
             print("Running command: ", cmd)
             p = Popen(cmd, shell='True', stdout=PIPE, stderr=PIPE)

@@ -8,12 +8,12 @@ tags:
   owner: mudogru
 
 settings:
-  default_compute: azureml:aml-cluster
+  default_compute: azureml:genomics-cluster
 
 jobs:
   seq_quality_control:
     type: parallel
-    compute: azureml:aml-cluster
+    compute: azureml:genomics-cluster
     inputs:
       input_folder: 
         type: uri_folder
@@ -32,13 +32,13 @@ jobs:
     mini_batch_size: "1"
     resources:
         instance_count: 2
-    max_concurrency_per_instance: 1
+    max_concurrency_per_instance: 2
 
     logging_level: "DEBUG"
     mini_batch_error_threshold: 1
     retry_settings:
       max_retries: 1
-      timeout: 60
+      timeout: 1200
 
     task:
       type: run_function
@@ -60,7 +60,7 @@ jobs:
 
   bwa_index:
     type: command
-    compute: azureml:aml-cluster
+    compute: azureml:genomics-cluster
     component: azureml:component_bwa_indexer:3
     inputs:
       ref_genome:
@@ -76,7 +76,7 @@ jobs:
   bwa:
     display_name: BWA Alignment
     type: parallel
-    compute: azureml:aml-cluster
+    compute: azureml:genomics-cluster
     inputs:
       input_folder: 
         type: uri_folder
@@ -98,14 +98,15 @@ jobs:
     input_data: ${{inputs.input_folder}}
     mini_batch_size: "1"
     resources:
-        instance_count: 2
+        instance_count: 4
     max_concurrency_per_instance: 1
 
     logging_level: "DEBUG"
     mini_batch_error_threshold: 1
+
     retry_settings:
       max_retries: 1
-      timeout: 60
+      timeout: 10800
 
     task:
       type: run_function
@@ -115,6 +116,7 @@ jobs:
       program_arguments: >-
         --output_folder ${{outputs.bwa_output_folder}}
         --ref_genome_index ${{inputs.index_folder}}
+        --cpu_threads 7
         --model "none"
         --error_threshold -1
         --allowed_failed_percent 30
