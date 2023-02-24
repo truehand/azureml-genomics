@@ -58,6 +58,6 @@ Assuming your workspace is called my-azureml-workspace, the job can be submitted
 
 Once you have set up your environment and configured the pipeline YAML file, you can submit the pipeline to Azure ML for execution. The pipeline will automatically provision the necessary resources and execute the jobs in the specified order.
 
-## Conclusion
+## Next steps
 
-This pipeline is a powerful tool for analyzing large genomics data sets using parallel processing. With its ability to handle large data sets and retry failed jobs, the pipeline can help streamline the genomics analysis process and provide valuable insights into biological systems.
+It will be fantastic if you want to contribute to this repository by creating other re-usable components and environments that can be used from within other pipelines. Get in touch! 
