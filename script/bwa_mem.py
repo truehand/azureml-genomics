@@ -32,13 +32,11 @@ def init():
     print ("output folder:", output_folder)
     print ("cpu_threads:", cpu_threads)
 
-
 def run(mini_batch):
     # check each file's size and print
     processed_files = []
     for r1 in mini_batch:
         r2 = r1
-        print("output folder:", output_folder)
         print("Processing file: ", r1)
         if r1.endswith('_R2.fastq.gz'):
             # ignore R2 files
