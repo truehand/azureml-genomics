@@ -40,6 +40,10 @@ Similarly, an environment can be defined as follows:
 
 `az ml environment create --file ./env-bwa/environment.yml --resource-group demo --workspace-name my-azureml-workspace --name bwa --version 5`
 
+If course, these commands require the az cli to be authenticated beforehand, for which one can run:
+
+`az login`
+
 ## Pipeline Inputs and Outputs
 
 The pipeline takes input sequence data from an Azure Blob Storage datastore and outputs the quality control results and alignment output to another Azure Blob Storage datastore. The pipeline also creates a log file for each job, which is stored in the same Azure Blob Storage datastore as the job output.
@@ -51,10 +55,6 @@ To run this pipeline, you will need an Azure ML workspace and access to an Azure
 Assuming your workspace is called my-azureml-workspace, the job can be submitted from the command line as follows:
 
 `az ml job create --file pipeline.yml --workspace-name my-azureml-workspace --resource-group demo --web`
-
-If course, this requires the az cli to be authenticated beforehand, for which one can run:
-
-`az login`
 
 Once you have set up your environment and configured the pipeline YAML file, you can submit the pipeline to Azure ML for execution. The pipeline will automatically provision the necessary resources and execute the jobs in the specified order.
 
