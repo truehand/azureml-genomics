@@ -1,8 +1,8 @@
 $schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
 type: pipeline
 
-display_name: genomics-using-parallel
-description: Genomics pipeline with inline parallel jobs
+display_name: azureml-genomics-pipeline
+description: Genomics pipeline with parallel jobs
 tags:
   tag: tagvalue
   owner: mudogru
@@ -69,7 +69,7 @@ jobs:
         mode: download
     outputs:
       ref_index_folder:
-        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-856350b609d7/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/ref_genome_index/
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-xxxyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/ref_genome_index/
         type: uri_folder
         mode: rw_mount
 
@@ -80,7 +80,7 @@ jobs:
     inputs:
       input_folder: 
         type: uri_folder
-        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-856350b609d7/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_data/
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-xxxyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_data/
         mode: ro_mount
       index_folder:
         path: ${{parent.jobs.bwa_index.outputs.ref_index_folder}}
@@ -89,7 +89,7 @@ jobs:
     outputs:
       bwa_output_folder:
         type: uri_folder
-        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-856350b609d7/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_output/
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-xxxyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_output/
         mode: rw_mount
       output_files:
         type: uri_file
