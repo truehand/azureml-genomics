@@ -30,6 +30,16 @@ This job creates an index for the reference genome used in the alignment step. T
 
 This job aligns the input sequence data to the reference genome using the BWA tool. The job runs in parallel on four instances, each with a single CPU thread. The output of the job is stored in an Azure Blob Storage datastore.
 
+## Creating components and environments
+
+To register the bwa_index component into an ML workspace called my-azureml-workspace, with version #3:
+
+`az ml component create --file bwa_index.yml --workspace-name my-azureml-workspace --resource-group demo --version 3`
+
+Similarly, an environment can be defined as follows:
+
+`az ml environment create --file ./env-bwa/environment.yml --resource-group demo --workspace-name my-azureml-workspace --name bwa --version 5`
+
 ## Pipeline Inputs and Outputs
 
 The pipeline takes input sequence data from an Azure Blob Storage datastore and outputs the quality control results and alignment output to another Azure Blob Storage datastore. The pipeline also creates a log file for each job, which is stored in the same Azure Blob Storage datastore as the job output.
