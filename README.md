@@ -48,15 +48,19 @@ If course, these commands require the az cli to be authenticated beforehand, for
 
 The pipeline takes input sequence data from an Azure Blob Storage datastore and outputs the quality control results and alignment output to another Azure Blob Storage datastore. The pipeline also creates a log file for each job, which is stored in the same Azure Blob Storage datastore as the job output.
 
-## Running the Pipeline
+## Azure ML compute
 
-To run this pipeline, you will need an Azure ML workspace and access to an Azure ML cluster. 
-
-For this example, I set up a compute CPU-based cluster within my workspace that has this type of VMs:
+For this example, I set up a CPU-based cluster within my workspace that has this type of VMs:
 
 - Standard_D13_v2 (8 cores, 56 GB RAM, 400 GB disk)
 
-To save costs, I set it up a a low_priority cluster (spot instances), and set the minimum number of node as zero, and the maximum as 8.
+To save costs, I set it up as a low_priority cluster (spot instances), and set the minimum number of node as zero, and the maximum as 8.
+
+This cluster is referred as "azureml:genomics-cluster" within the pipeline definition. Each step in the pipeline can use a different cluster, but in this example we use this "genomics-cluster" as the default compute across all steps.
+
+## Running the Pipeline
+
+To run this pipeline, you will need an Azure ML workspace and access to an Azure ML cluster. 
 
 You will also need to provide the necessary input data and configure the pipeline YAML file accordingly. Read more here about how you can create individual files or folders as registered datasets:
 
