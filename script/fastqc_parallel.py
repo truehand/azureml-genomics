@@ -25,12 +25,10 @@ def init():
     print ("output folder:", output_folder)
 
 def run(input_folder):
-    # check each file's size and print
     processed_files = []
     for file_name in input_folder:
         print("output folder:", output_folder)
         print("Processing file: ", file_name)
-
         # run fastqc for each file
         cmd = 'fastqc ' + file_name + ' -o ' + output_folder
         try:
