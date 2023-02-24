@@ -17,12 +17,12 @@ jobs:
     inputs:
       input_folder: 
         type: uri_folder
-        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-856350b609d7/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_data/
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-xxxyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_data/
         mode: ro_mount
     outputs:
       output_folder:
         type: uri_folder
-        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-856350b609d7/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_qc/
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-zzzyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_qc/
         mode: rw_mount
       output_files:
         type: uri_file

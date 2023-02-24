@@ -1,7 +1,6 @@
 # ---------------------------------------------------------
-# Copyright (c) Microsoft Corporation. All rights reserved.
-# ---------------------------------------------------------
 """This module will run fastqc."""
+# ---------------------------------------------------------
 
 import argparse
 import os
@@ -31,17 +30,8 @@ def run(input_folder):
     for file_name in input_folder:
         print("output folder:", output_folder)
         print("Processing file: ", file_name)
-        cmd = 'du -h ' + file_name
-        try:
-            print("Running command: ", cmd)
-            p = Popen(cmd, shell='True', stdout=PIPE, stderr=PIPE)
-            stdout, stderr = p.communicate()
-            print("stdout: ", stdout)
-        except Exception as e:
-            print("Error in user command: ", e)
-            raise e
 
-        # run sequana_fastqc for entire folder
+        # run fastqc for each file
         cmd = 'fastqc ' + file_name + ' -o ' + output_folder
         try:
             print("Running command: ", cmd)
