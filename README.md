@@ -48,6 +48,10 @@ If course, these commands require the az cli to be authenticated beforehand, for
 
 The pipeline takes input sequence data from an Azure Blob Storage datastore and outputs the quality control results and alignment output to another Azure Blob Storage datastore. The pipeline also creates a log file for each job, which is stored in the same Azure Blob Storage datastore as the job output.
 
+You will need to provide the necessary input data and configure the pipeline YAML file accordingly. Read more here about how you can create individual files or folders as registered datasets:
+
+https://learn.microsoft.com/en-us/azure/machine-learning/concept-data
+
 ## Azure ML compute
 
 For this example, I set up a CPU-based cluster within my workspace that has this type of VMs:
@@ -62,11 +66,7 @@ This cluster is referred as "azureml:genomics-cluster" within the pipeline defin
 
 To run this pipeline, you will need an Azure ML workspace and access to an Azure ML cluster. 
 
-You will also need to provide the necessary input data and configure the pipeline YAML file accordingly. Read more here about how you can create individual files or folders as registered datasets:
-
-https://learn.microsoft.com/en-us/azure/machine-learning/concept-data
-
-Assuming your workspace is called my-azureml-workspace, the job can be submitted from the command line as follows:
+Assuming your workspace is called "my-azureml-workspace", and your resource-group "demo", the job can be submitted from the command line as follows:
 
 `az ml job create --file pipeline.yml --workspace-name my-azureml-workspace --resource-group demo --web`
 
