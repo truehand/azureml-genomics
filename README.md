@@ -50,7 +50,17 @@ The pipeline takes input sequence data from an Azure Blob Storage datastore and 
 
 ## Running the Pipeline
 
-To run this pipeline, you will need an Azure ML workspace and access to an Azure ML cluster. You will also need to provide the necessary input data and configure the pipeline YAML file accordingly.
+To run this pipeline, you will need an Azure ML workspace and access to an Azure ML cluster. 
+
+For this example, I set up a compute CPU-based cluster within my workspace that has this type of VMs:
+
+- Standard_D13_v2 (8 cores, 56 GB RAM, 400 GB disk)
+
+To save costs, I set it up a a low_priority cluster (spot instances), and set the minimum number of node as zero, and the maximum as 8.
+
+You will also need to provide the necessary input data and configure the pipeline YAML file accordingly. Read more here about how you can create individual files or folders as registered datasets:
+
+https://learn.microsoft.com/en-us/azure/machine-learning/concept-data
 
 Assuming your workspace is called my-azureml-workspace, the job can be submitted from the command line as follows:
 
