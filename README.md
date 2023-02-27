@@ -7,8 +7,6 @@ This is an Azure Machine Learning (Azure ML) pipeline that runs an example genom
 
 The pipeline is defined as a YAML file, pipeline.yml, which can be executed in an Azure ML workspace. The pipeline runs on an elastic Azure ML compute cluster that is called "genomics-cluster" in this example, and the input and output data are stored in an Azure Blob Storage datastore associated with the same instance of an Azure ML workspace.
 
-In this example, the human reference genome, hg38, is defined in AzureML as a versioned, centrally dataset in our ML workspace, which in turns point to a publicly available file. Also as input, I have a few input fastq files in my Azure ML workspaces’ default datastore. 
-
 The pipeline is designed to handle large data sets and is optimized for parallel processing. The seq_quality_control and bwa jobs are run in parallel on multiple instances, each with a specified number of CPU threads (specified with bwa's -t parameter). The pipeline also includes retry settings in case of job failures and central logging to help diagnose issues.
 
 Step 1 and 2 can start simultaneously as there are no interdependencies between them. Step 2 and 3 can process input files in parallel. Each step requires a different software environment, and these environments are also defined and registered in our Azure ML workspace. 
@@ -51,6 +49,23 @@ The pipeline takes input sequence data from an Azure Blob Storage datastore and 
 You will need to provide the necessary input data and configure the pipeline YAML file accordingly. Read more here about how you can create individual files or folders as registered datasets:
 
 https://learn.microsoft.com/en-us/azure/machine-learning/concept-data
+
+In this example, the human reference genome, hg38, is defined in AzureML as a versioned, centrally dataset in our ML workspace, which in turns point to a publicly available file. Also as input, I have a few input fastq files in my Azure ML workspaces’ default datastore. 
+
+![human reference genome](./images/human_ref_dataset.png)
+
+Once registered, the above dataset can now be referred as "azureml:hg38:1" in pipeline.yml. The last number in this representation is the version of the file that has been registered within our workspace.
+
+For the input DNA files, we create a folder in our Azure datastore and upload our input sequences, via Storage Explorer or some other mechanism preferred:
+
+![upload paired seqeunces](./images/upload_genomic_data.png)
+
+Then, we simply define a uri_folder for this location, which in turn, we can refer from our pipeline:
+
+![paired input DNA](./images/input_dna.png)
+
+ Unlike the above human reference genome, this time, it's not a pointer to an external public location, but to an Azure ML datastore path in our Azure subscription.
+
 
 ## Azure ML compute
 
