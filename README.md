@@ -12,7 +12,7 @@ The pipeline is designed to handle large data sets and is optimized for parallel
 Step 1 and 2 can start simultaneously as there are no interdependencies between them. Step 2 and 3 can process input files in parallel. Each step requires a different software environment, and these environments are also defined and registered in our Azure ML workspace. 
 
 
-## Pipeline Jobs
+## Pipeline Steps
 
 - seq_quality_control
 
@@ -22,11 +22,20 @@ This step uses the "parallel" mode, which requires a run script called "fastqc_p
 
 - bwa_index
 
-This job creates an index for the reference genome used in the alignment step. The job is run on a single instance as it cannot be run in parallel, and uses the BWA Indexer component registered by Azure ML. Pipeline components defined by users can be centrally registered so that they can be re-used in other pipelines. They are versioned and there is an audit log for which pipeline jobs have utilised them. The output of the job is stored in an Azure Blob Storage datastore, which can be accessed by any subsequent pipeline step.
+This job creates an index for the reference genome used in the alignment step. The job is run on a single instance as it cannot be run in parallel, and uses the BWA Indexer component registered by Azure ML. [Pipeline components](https://learn.microsoft.com/en-us/azure/machine-learning/concept-component) defined by users can be centrally registered so that they can be re-used in other pipelines. They are versioned and there is an audit log for which pipeline jobs have utilised them. Only this step is a centrally registered,versioned and sharable step, to show how we can use a mix-and-match strategy to include different types of pipeline steps/jobs. The output of the job is stored in an Azure Blob Storage datastore, which can be accessed by any subsequent pipeline step.
 
 - bwa
 
 This job aligns the input sequence data to the reference genome using the BWA tool. The job runs in parallel on four instances, each with a single CPU thread. The output of the job is stored in an Azure Blob Storage datastore.
+
+Both the bwa and seq_quality_control steps are of type run_function. To read more on this type of jobs please visit:
+
+https://learn.microsoft.com/en-us/azure/machine-learning/how-to-use-parallel-job-in-pipeline?tabs=cliv2
+
+This type of jobs requires a Python script that has two functions: _init()_ and _run()_:
+
+- _init()_ is used for common preparation before starting mini-batches, for example, use it to load and initialise any packages/models etc that you may use under the run() function
+- _run(mini_batch)_ will be run once for every single file under a directory specified by its input parameter _mini_batch_. These runs are automatically distributed across the cluster nodes.
 
 ## Creating components and environments
 
@@ -73,22 +82,19 @@ For this example, I set up a CPU-based cluster within my workspace that has this
 
 - Standard_D13_v2 (8 cores, 56 GB RAM, 400 GB disk)
 
-
 ![AML compute cluster](./images/genomics_cluster.png)
 
-To save costs, I set it up as a low_priority cluster (spot instances), and set the minimum number of node as zero, and the maximum as 8.
+To minimise costs, I set it up as a low_priority cluster (spot instances), and set the minimum number of node as zero, and the maximum as 8.
 
 This cluster is referred as "azureml:genomics-cluster" within the pipeline definition. Each step in the pipeline can use a different cluster, but in this example we use this "genomics-cluster" as the default compute across all steps.
 
 ## Running the Pipeline
 
-To run this pipeline, you will need an Azure ML workspace and access to an Azure ML cluster. 
+Once you have set up your environment and configured the pipeline YAML file, you can submit the pipeline to Azure ML for execution. The pipeline will automatically provision the necessary resources and execute the jobs in the specified order.
 
 Assuming your workspace is called "my-azureml-workspace", and your resource-group "demo", the job can be submitted from the command line as follows:
 
 `az ml job create --file pipeline.yml --workspace-name my-azureml-workspace --resource-group demo --web`
-
-Once you have set up your environment and configured the pipeline YAML file, you can submit the pipeline to Azure ML for execution. The pipeline will automatically provision the necessary resources and execute the jobs in the specified order.
 
 ## Next steps
 
