@@ -1,6 +1,6 @@
 # Azure ML for Genomics Pipelines
 
-This is an Azure Machine Learning (Azure ML) pipeline that runs an example genomics workflow using AML v2. The pipeline consists of three jobs, two of which run in parallel. The first job, seq_quality_control, performs quality control on input sequence data using the FastQC tool. The second job, bwa_index, creates an index for the reference genome used in the alignment step. Once the index is created, the third job, bwa, kicks off and aligns the input sequence data to the reference genome using the Burrows-Wheeler Aligner (BWA) tool. This BWA step processes paired input ".fa.gz" reads in parallel across multiple nodes of an Azure ML cluster with auto-scale.
+This is an Azure Machine Learning (Azure ML) pipeline that runs a very simple yet representative genomics workflow using AML v2. The pipeline consists of three jobs, two of which run in parallel. The first job, seq_quality_control, performs quality control on input sequence data using the FastQC tool. The second job, bwa_index, creates an index for the reference genome used in the alignment step. Once the index is created, the third job, bwa, kicks off and aligns the input sequence data to the reference genome using the Burrows-Wheeler Aligner (BWA) tool. This BWA step processes paired input ".fa.gz" reads in parallel across multiple nodes of an Azure ML cluster with auto-scale.
 
 ## Pipeline Architecture
 ![genomics workflow](./images/genomics_workflow.png)
