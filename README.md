@@ -18,7 +18,7 @@ Step 1 and 2 can start simultaneously as there are no interdependencies between 
 
 This job performs quality control on the input sequence data using the FastQC tool. The job runs in parallel on multiple nodes. The output of the job is stored in an Azure Blob Storage datastore. It leverages a fastqc environment registered in our workspace. This environment can be created using the environment.yml and Dockerfile contained within env-fastq folder.
 
-This step uses the "parallel" mode, which requires a run script called "fastqc_parallel.py"/ Overall, this script is designed to run the fastqc tool on each input file in parallel, and generate the output report in the specified output folder.
+This step uses the "parallel" mode, which requires a run script called "fastqc_parallel.py". Overall, this script is designed to run the fastqc tool on each input file in parallel, and generate the output report in the specified output folder.
 
 - bwa_index
 
