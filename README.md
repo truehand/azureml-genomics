@@ -47,7 +47,7 @@ Similarly, an environment can be defined as follows:
 
 `az ml environment create --file ./env-bwa/environment.yml --resource-group demo --workspace-name my-azureml-workspace --name bwa --version 5`
 
-If course, these commands require the az cli to be authenticated beforehand, for which one can run:
+Of course, these commands require the az cli to be authenticated beforehand, for which one can run:
 
 `az login`
 
