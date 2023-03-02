@@ -59,7 +59,7 @@ You will need to provide the necessary input data and configure the pipeline YAM
 
 https://learn.microsoft.com/en-us/azure/machine-learning/concept-data
 
-In this example, the human reference genome, hg38, is defined in AzureML as a versioned, centrally dataset in our ML workspace, which in turns point to a publicly available file. Also as input, I have a few input fastq files in my Azure ML workspaces’ default datastore. 
+In this example, the human reference genome, hg38, is defined in AzureML as a versioned, centrally registered dataset in our ML workspace, which in turns point to a publicly available file. Also as input, I have a few input fastq files in my Azure ML workspaces’ default datastore. 
 
 ![human reference genome](./images/human_ref_dataset.png)
 
