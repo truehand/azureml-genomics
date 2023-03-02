@@ -55,9 +55,7 @@ Of course, these commands require the az cli to be authenticated beforehand, for
 
 The pipeline takes input sequence data from an Azure Blob Storage datastore and outputs the quality control results and alignment output to another Azure Blob Storage datastore. The pipeline also creates a log file for each job, which is stored in the same Azure Blob Storage datastore as the job output.
 
-You will need to provide the necessary input data and configure the pipeline YAML file accordingly. Read more here about how you can create individual files or folders as registered datasets:
-
-https://learn.microsoft.com/en-us/azure/machine-learning/concept-data
+You will need to provide the necessary input data and configure the pipeline YAML file accordingly. [Read more here](https://learn.microsoft.com/en-us/azure/machine-learning/concept-data) about how you can create individual files or folders as registered datasets.
 
 In this example, the human reference genome, hg38, is defined in AzureML as a versioned, centrally registered dataset in our ML workspace, which in turns point to a publicly available file. Also as input, I have a few input fastq files in my Azure ML workspaces’ default datastore. 
 
@@ -73,12 +71,11 @@ Then, we simply define a uri_folder for this location, which in turn, we can ref
 
 ![paired input DNA](./images/input_dna.png)
 
- Unlike the above human reference genome, this time, it's not a pointer to an external public location, but to an Azure ML datastore path in our Azure subscription.
-
+ Unlike the above human reference genome, this time, this data URI is not a pointer to an external public location, but to an Azure ML datastore path in our Azure subscription.
 
 ## Azure ML compute
 
-For this example, I set up a CPU-based cluster within my workspace that has this type of VMs:
+I [created](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-create-attach-compute-cluster?tabs=python) a CPU-based cluster within my workspace that has this type of VMs:
 
 - Standard_D13_v2 (8 cores, 56 GB RAM, 400 GB disk)
 

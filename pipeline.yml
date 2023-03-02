@@ -1,0 +1,129 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+
+display_name: azureml-genomics-pipeline
+description: Genomics pipeline with parallel jobs
+tags:
+  tag: tagvalue
+  owner: mudogru
+
+settings:
+  default_compute: azureml:genomics-cluster
+
+jobs:
+  seq_quality_control:
+    type: parallel
+    compute: azureml:genomics-cluster
+    inputs:
+      input_folder: 
+        type: uri_folder
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-xxxyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_data/
+        mode: ro_mount
+    outputs:
+      output_folder:
+        type: uri_folder
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-zzzyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_qc/
+        mode: rw_mount
+      output_files:
+        type: uri_file
+        mode: rw_mount
+
+    input_data: ${{inputs.input_folder}}
+    mini_batch_size: "1"
+    resources:
+        instance_count: 2
+    max_concurrency_per_instance: 2
+
+    logging_level: "DEBUG"
+    mini_batch_error_threshold: 1
+    retry_settings:
+      max_retries: 1
+      timeout: 1200
+
+    task:
+      type: run_function
+      code: "./script"
+      entry_script: fastqc_parallel.py
+      environment: azureml:fastqc:2
+
+      program_arguments: >-
+        --output_folder ${{outputs.output_folder}}
+        --model "none"
+        --error_threshold -1
+        --allowed_failed_percent 10
+        --task_overhead_timeout 1200
+        --progress_update_timeout 6000
+        --first_task_creation_timeout 600
+        --copy_logs_to_parent True
+        --resource_monitor_interval 20
+      append_row_to: ${{outputs.output_files}}
+
+  bwa_index:
+    type: command
+    compute: azureml:genomics-cluster
+    component: azureml:component_bwa_indexer:3
+    inputs:
+      ref_genome:
+        type: uri_file
+        path: azureml:hg38:1
+        mode: download
+    outputs:
+      ref_index_folder:
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-xxxyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/ref_genome_index/
+        type: uri_folder
+        mode: rw_mount
+
+  bwa:
+    display_name: BWA Alignment
+    type: parallel
+    compute: azureml:genomics-cluster
+    inputs:
+      input_folder: 
+        type: uri_folder
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-xxxyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_data/
+        mode: ro_mount
+      index_folder:
+        path: ${{parent.jobs.bwa_index.outputs.ref_index_folder}}
+        type: uri_folder
+        mode: ro_mount
+    outputs:
+      bwa_output_folder:
+        type: uri_folder
+        path: azureml://subscriptions/442d0207-a601-43dd-b9b8-xxxyyyzzz/resourcegroups/demo/workspaces/azureml-mutlu/datastores/workspaceblobstore/paths/genomics_output/
+        mode: rw_mount
+      output_files:
+        type: uri_file
+        mode: rw_mount
+
+    input_data: ${{inputs.input_folder}}
+    mini_batch_size: "1"
+    resources:
+        instance_count: 4
+    max_concurrency_per_instance: 1
+
+    logging_level: "DEBUG"
+    mini_batch_error_threshold: 1
+
+    retry_settings:
+      max_retries: 1
+      timeout: 10800
+
+    task:
+      type: run_function
+      code: "./script"
+      entry_script: bwa_mem.py
+      environment: azureml:bwa:5
+      program_arguments: >-
+        --output_folder ${{outputs.bwa_output_folder}}
+        --ref_genome_index ${{inputs.index_folder}}
+        --cpu_threads 7
+        --model "none"
+        --error_threshold -1
+        --allowed_failed_percent 30
+        --task_overhead_timeout 9200
+        --progress_update_timeout 30000
+        --first_task_creation_timeout 600
+        --copy_logs_to_parent True
+        --resource_monitor_interval 150
+      append_row_to: ${{outputs.output_files}}
+
