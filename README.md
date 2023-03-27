@@ -1,6 +1,10 @@
 # Azure ML for Genomics Pipelines
 
-This is an Azure Machine Learning (Azure ML) pipeline that runs a very simple yet representative genomics workflow using AML v2. The pipeline consists of three jobs, two of which run in parallel. The first job, seq_quality_control, performs quality control on input sequence data using the FastQC tool. The second job, bwa_index, creates an index for the reference genome used in the alignment step. Once the index is created, the third job, bwa, kicks off and aligns the input sequence data to the reference genome using the Burrows-Wheeler Aligner (BWA) tool. This BWA step processes paired input ".fa.gz" reads in parallel across multiple nodes of an Azure ML cluster with auto-scale.
+This is an Azure Machine Learning (Azure ML) pipeline example that demonstrates how we can run genomics workflows using Azure ML v2. The example is quite simple, it only performs sequence quality check (using _fastqc_) on input sequence data and generates SAM files from the same set of paired DNA sequences (using the _bwa_ tool). The pipeline is designed to be scalable and can be run on a large number of input files in parallel. The pipeline is also designed to be highly available and fault tolerant, and can be run on a cluster of Azure ML compute nodes.
+
+Please read this blog entry for some more background on this approach on the [Microsoft Tech Community](https://techcommunity.microsoft.com/t5/ai-machine-learning-blog/introducing-scalable-and-enterprise-grade-genomics-workflows-in/ba-p/3752222)
+
+The pipeline consists of three jobs, two of which run in parallel. The first job, seq_quality_control, performs quality control on input sequence data using the FastQC tool. The second job, bwa_index, creates an index for the reference genome used in the alignment step. Once the index is created, the third job, bwa, kicks off and aligns the input sequence data to the reference genome using the Burrows-Wheeler Aligner (BWA) tool. This BWA step processes paired input ".fa.gz" reads in parallel across multiple nodes of an Azure ML cluster with auto-scale.
 
 ## Pipeline Architecture
 ![genomics workflow](./images/genomics_workflow.png)
